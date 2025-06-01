@@ -14,3 +14,6 @@ All files and messages are encrypted using strong cryptography, with decoy vault
 - Panic button/self-destruct
 - Audit logging
 - Multiple vaults, backups, themes, and more!
+
+
+So far, MI 9: Black Vault features a secure, password-protected vault system using modern cryptography (PBKDF2, AES). All files are encrypted and stored with metadata, and the PyQt5-based GUI enables easy importing, exporting, and management of secret files. No data is ever left unencrypted on disk, and the user experience is built to mirror a true ‘spy-vault’ workflow.”
