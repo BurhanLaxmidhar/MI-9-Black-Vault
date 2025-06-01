@@ -80,13 +80,17 @@ class MainWindow(QMainWindow):
         hbox = QHBoxLayout()
         self.import_btn = QPushButton("Import File")
         self.export_btn = QPushButton("Export Selected File")
+        self.delete_btn = QPushButton("Delete Selected File")
         hbox.addWidget(self.import_btn)
         hbox.addWidget(self.export_btn)
-        vbox.addLayout(hbox)
+        hbox.addWidget(self.delete_btn)
         
         self.import_btn.clicked.connect(self.import_file)
         self.export_btn.clicked.connect(self.export_file)
+        self.delete_btn.clicked.connect(self.delete_file)
         
+        vbox.addLayout(hbox)
+
         central.setLayout(vbox)
         self.setCentralWidget(central)
         
@@ -116,6 +120,25 @@ class MainWindow(QMainWindow):
         if out_fname:
             extract_file_from_vault(entry, out_fname)
             QMessageBox.information(self, "Exported", f"Exported {entry['name']} to {out_fname}.")
+
+    def delete_file(self):
+        idx = self.file_list.currentRow()
+        if idx == -1:
+            QMessageBox.warning(self, "No File", "Select a file to delete!")
+            return
+        entry = self.vault_data["files"][idx]
+        reply = QMessageBox.question(
+            self,
+            "Confirm Delete",
+            f"Are you sure you want to permanently delete '{entry['name']}'?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+        if reply == QMessageBox.Yes:
+            del self.vault_data["files"][idx]
+            # Save the updated vault
+            save_vault(self.password, self.vault_data)
+            self.refresh_file_list()
+            QMessageBox.information(self, "File Deleted", f"'{entry['name']}' was deleted from the vault.")
 
 # Function to start the GUI application
 def start_gui():
